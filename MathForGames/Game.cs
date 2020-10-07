@@ -7,12 +7,12 @@ namespace MathForGames
 {
     class Game
     {
-        private static bool gameOver = false;
+        private static bool _gameOver = false;
 
         //Static function used to set game over without an instance of game.
         public static void SetGameOver(bool value)
         {
-            gameOver = value;
+            _gameOver = value;
         }
 
 
@@ -26,7 +26,7 @@ namespace MathForGames
         //Called every frame.
         public void Update()
         {
-
+            
         }
 
         //Used to display objects and other info on the screen.
@@ -48,7 +48,7 @@ namespace MathForGames
         {
             Start();
 
-            while(gameOver == false)
+            while(!_gameOver)
             {
                 Update();
                 Draw();
