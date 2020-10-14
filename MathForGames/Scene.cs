@@ -117,6 +117,7 @@ namespace MathForGames
 
         public virtual void Draw()
         {
+
             //for each entity
             for (int i = 0; i < _entities.Length; i++)
             {

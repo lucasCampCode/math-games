@@ -1,35 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Text;
+using MathLib;
 
 namespace MathForGames
 {
     class Entity
     {
-        private char _icon = '-';
-        private int _x = 0;
-        private int _y = 0;
-        public void Start()
+        protected char _icon = '-';
+        protected Vector2 _position;
+        protected Vector2 _velocity;
+        protected ConsoleColor _color;
+
+        public Vector2 Position
+        {
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+            }
+        }
+
+        public Vector2 Velocity
+        {
+            get
+            {
+                return _velocity;
+            }
+            set
+            {
+                _velocity = value;
+            }
+        }
+
+        public Entity()
+        {
+            _position = new Vector2();
+            _velocity = new Vector2();
+        }
+
+        public Entity(float x, float y, char icon = ' ', ConsoleColor color = ConsoleColor.White)
+        {
+
+            _icon = icon;
+            _position = new Vector2(x,y);
+            _velocity = new Vector2();
+            _color = color;
+        }
+
+        public virtual void Start()
         {
 
         }//start of entity
 
-        public void Update()
+        public virtual void Update()
         {
-            if (Game.CheckKey(ConsoleKey.A)) 
-                _x--;
-            if (Game.CheckKey(ConsoleKey.D))
-                _x++;
+            _position.X += _velocity.X;
+            _position.Y += _velocity.Y;
+
+            _position.X = Math.Clamp(_position.X, 0, Console.WindowWidth - 1);
+            _position.Y = Math.Clamp(_position.Y, 0, Console.WindowHeight - 1);
         }//updates of entity
 
-        public void Draw()
+        public virtual void Draw()
         {
-            Console.SetCursorPosition(_x,_y);
+            Console.ForegroundColor = _color;
+            Console.SetCursorPosition((int)_position.X, (int)_position.Y);
             Console.Write(_icon);
+            Console.ForegroundColor = ConsoleColor.White;
         }//draws the entity
 
-        public void End()
+        public virtual void End()   
         {      
 
         }//ends the enitities
