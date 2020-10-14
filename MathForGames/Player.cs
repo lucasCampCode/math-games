@@ -17,19 +17,19 @@ namespace MathForGames
             {
                 case ConsoleKey.D:
                     _velocity.X = 1;
+                    _velocity.Y = 0;
                     break;
                 case ConsoleKey.A:
                     _velocity.X = -1;
+                    _velocity.Y = 0;
                     break;
                 case ConsoleKey.S:
+                    _velocity.X = 0;
                     _velocity.Y = 1;
                     break;
                 case ConsoleKey.W:
-                    _velocity.Y = -1;
-                    break;
-                default:
                     _velocity.X = 0;
-                    _velocity.Y = 0;
+                    _velocity.Y = -1;
                     break;
             }
             base.Update();

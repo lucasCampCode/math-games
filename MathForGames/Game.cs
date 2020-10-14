@@ -10,6 +10,7 @@ namespace MathForGames
     {
         private static bool _gameOver = false;
         private Scene _scene;
+        public Random rng;
 
         public static ConsoleColor DefaultColor { get; set; } = ConsoleColor.DarkCyan;
 
@@ -35,9 +36,8 @@ namespace MathForGames
         {
             Console.CursorVisible = false;
             _scene = new Scene();
-            Entity entity = new Entity(0,0,'■',ConsoleColor.Cyan);
-            entity.Velocity.X = 1;
-            Player player = new Player(5, 5, '@', ConsoleColor.Green);
+            Entity entity = new Entity(Console.WindowWidth/2,Console.WindowHeight/2,'■',ConsoleColor.Green);
+            Player player = new Player(5, 5, '■', ConsoleColor.Red);
             _scene.AddEntity(entity);
             _scene.AddEntity(player);
         }
@@ -74,7 +74,7 @@ namespace MathForGames
                 Draw();
                 while (Console.KeyAvailable) 
                     Console.ReadKey(true);
-                Thread.Sleep(100);
+                Thread.Sleep(30);
             }
 
             End();
