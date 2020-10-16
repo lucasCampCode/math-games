@@ -40,11 +40,13 @@ namespace MathForGames
             _scene = new Scene();
             _scene.AddEntity(_entity);
             _scene.AddEntity(_player);
+            _player.AddTail();
         }
         
         //Called every frame.
         public void Update()
         {
+
             _scene.Update();
             if (_player.Position.X == _entity.Position.X && _player.Position.Y == _entity.Position.Y)
             {
@@ -59,6 +61,7 @@ namespace MathForGames
         {
             Console.Clear();
             _scene.Draw();
+            _player.Draw();
         }
 
 

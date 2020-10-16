@@ -6,27 +6,50 @@ namespace MathForGames
 {
     class Player : Entity
     {
-        private Scene _tail;
-
-        public Player(float x,float y,char icon = ' ',ConsoleColor color = ConsoleColor.White)
+        private Scene _tail = new Scene();
+        public Player(float x,float y, char icon = '■',ConsoleColor color = ConsoleColor.White)
             : base(x,y,icon,color)
         {
-            _tail = new Scene();
-            Entity firstBlock = new Entity(_position.X, _position.Y, '■', Game.DefaultColor);
-            _tail.AddEntity(firstBlock);
         }
 
         public void AddTail()
         {
-            Entity block = new Entity(_position.X, _position.Y, '■', Game.DefaultColor);
-            _tail.AddEntity(block);
+            Entity block;
+            Entity[] entities = _tail.List;
+            int lastTail = entities.Length-1;
+            if (entities.Length > 0)
+            {
+                if (entities[lastTail].Velocity.X > 0)
+                {
+                    block = new Entity(entities[lastTail].Position.X - 1, entities[lastTail].Position.Y);
+                    _tail.AddEntity(block);
+                }
+                else if (entities[lastTail].Velocity.X < 0)
+                {
+                    block = new Entity(entities[lastTail].Position.X + 1, entities[lastTail].Position.Y);
+                    _tail.AddEntity(block);
+                }
+                if (entities[lastTail].Velocity.Y > 0)
+                {
+                    block = new Entity(entities[lastTail].Position.X, entities[lastTail].Position.Y - 1);
+                    _tail.AddEntity(block);
+                }
+                else if (entities[lastTail].Velocity.Y < 0)
+                {
+                    block = new Entity(entities[lastTail].Position.X, entities[lastTail].Position.Y + 1);
+                    _tail.AddEntity(block);
+                }
+            }
+            else
+            {
+                block = new Entity(Position.X, Position.Y);
+                _tail.AddEntity(block);
+            }
         }
-        public override void Start()
-        {
 
-        }
         public override void Update()
         {
+
             switch (Game.GetNextKey())
             {
                 case ConsoleKey.D:
@@ -46,8 +69,20 @@ namespace MathForGames
                     _velocity.Y = -1;
                     break;
             }
+            for (int i = 0; i < _tail.List.Length; i++)
+            {
+                _tail.List[i].Position += _velocity;
+            }
 
             base.Update();
+        }
+        public override void Draw()
+        {
+            for (int i = 0; i < _tail.List.Length; i++)
+            {
+                _tail.Draw();
+            }
+            base.Draw();
         }
     }
 }

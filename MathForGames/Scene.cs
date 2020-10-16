@@ -8,13 +8,33 @@ namespace MathForGames
     {
         private Entity[] _entities;
 
-        public Entity[] List { get; }
+        public Entity[] List 
+        {
+            get
+            {
+                return _entities;
+            } 
+        }
 
         public Scene()
         {
             _entities = new Entity[0];
         }
 
+        public void AddEntity()
+        {
+            //creating a new array that has an aditional slot from an old array
+            Entity[] newEntities = new Entity[_entities.Length + 1];
+            //copy values from old array to the old array
+            for (int i = 0; i < _entities.Length; i++)
+            {
+                newEntities[i] = _entities[i];
+            }
+            //sets the new entity at the end of the new array
+            newEntities[_entities.Length] = new Entity();
+            //set old array to the new array with the new entity
+            _entities = newEntities;
+        }
         public void AddEntity(Entity entity)
         {
             //creating a new array that has an aditional slot from an old array
