@@ -10,7 +10,9 @@ namespace MathForGames
     {
         private static bool _gameOver = false;
         private Scene _scene;
-        public Random rng;
+        private readonly Random rng = new Random(654625134);
+        private Entity _entity = new Entity(20,20, '■', ConsoleColor.Green);
+        private Player _player = new Player(5, 5, '■', ConsoleColor.Red);
 
         public static ConsoleColor DefaultColor { get; set; } = ConsoleColor.DarkCyan;
 
@@ -36,16 +38,20 @@ namespace MathForGames
         {
             Console.CursorVisible = false;
             _scene = new Scene();
-            Entity entity = new Entity(Console.WindowWidth/2,Console.WindowHeight/2,'■',ConsoleColor.Green);
-            Player player = new Player(5, 5, '■', ConsoleColor.Red);
-            _scene.AddEntity(entity);
-            _scene.AddEntity(player);
+            _scene.AddEntity(_entity);
+            _scene.AddEntity(_player);
         }
         
         //Called every frame.
         public void Update()
         {
             _scene.Update();
+            if (_player.Position.X == _entity.Position.X && _player.Position.Y == _entity.Position.Y)
+            {
+                _player.AddTail();
+                _entity.Position.X = rng.Next(0, Console.WindowWidth);
+                _entity.Position.Y = rng.Next(0, Console.WindowHeight);
+            }
         }
 
         //Used to display objects and other info on the screen.
@@ -74,7 +80,7 @@ namespace MathForGames
                 Draw();
                 while (Console.KeyAvailable) 
                     Console.ReadKey(true);
-                Thread.Sleep(30);
+                Thread.Sleep(250);
             }
 
             End();

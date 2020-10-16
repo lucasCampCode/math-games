@@ -8,6 +8,8 @@ namespace MathForGames
     {
         private Entity[] _entities;
 
+        public Entity[] List { get; }
+
         public Scene()
         {
             _entities = new Entity[0];
