@@ -53,5 +53,13 @@ namespace MathLib
         {
             return new Vector2(lhs.X * rhs, lhs.Y * rhs);
         }
+        public float GetMagnitude()
+        {
+            return (float)Math.Sqrt((X * X) + (Y * Y));
+        }
+        public Vector2 normalization()
+        {
+            return new Vector2(X % GetMagnitude(), Y % GetMagnitude());
+        }
     }
 }

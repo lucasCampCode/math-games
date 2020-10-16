@@ -10,7 +10,7 @@ namespace MathForGames
     {
         private static bool _gameOver = false;
         private Scene _scene;
-        private readonly Random rng = new Random(654625134);
+        private readonly Random rng = new Random();
         private Entity _entity = new Entity(20,20, '■', ConsoleColor.Green);
         private Player _player = new Player(5, 5, '■', ConsoleColor.Red);
 
@@ -40,7 +40,6 @@ namespace MathForGames
             _scene = new Scene();
             _scene.AddEntity(_entity);
             _scene.AddEntity(_player);
-            _player.AddTail();
         }
         
         //Called every frame.
@@ -50,7 +49,6 @@ namespace MathForGames
             _scene.Update();
             if (_player.Position.X == _entity.Position.X && _player.Position.Y == _entity.Position.Y)
             {
-                _player.AddTail();
                 _entity.Position.X = rng.Next(0, Console.WindowWidth);
                 _entity.Position.Y = rng.Next(0, Console.WindowHeight);
             }
