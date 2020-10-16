@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace MathLib
 {
@@ -42,5 +43,15 @@ namespace MathLib
             _y = y;
         }
 
+        public static Vector2 operator +(Vector2 lhs, Vector2 rhs)
+        {
+            float x = lhs.X + rhs.X;
+            float y = lhs.Y + rhs.Y;
+            return new Vector2(x, y);
+        }
+        public static Vector2 operator *(Vector2 lhs, float rhs)
+        {
+            return new Vector2(lhs.X * rhs, lhs.Y * rhs);
+        }
     }
 }
