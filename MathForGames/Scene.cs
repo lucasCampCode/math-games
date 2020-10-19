@@ -8,6 +8,7 @@ namespace MathForGames
     {
         private Entity[] _entities;
 
+        public bool Started { get; private set;}
         public Entity[] List 
         {
             get
@@ -62,6 +63,10 @@ namespace MathForGames
                 else //gives us our return value for debuging
                 {
                     entityRemoved = true;
+                    if (_entities[i].Started)
+                    {
+                        _entities[i].End();
+                    }
                 }
             }
             //set the old arrat to be the tempArray
@@ -97,6 +102,10 @@ namespace MathForGames
                 else //gives us our return value for debuging
                 {
                     entityRemoved = true;
+                    if (entity.Started)
+                    {
+                       entity.End();
+                    }
                 }
             }
             //set the old arrat to be the tempArray
@@ -107,11 +116,7 @@ namespace MathForGames
 
         public virtual void Start()
         {
-            //for each entity
-            for (int i = 0; i < _entities.Length; i++)
-            {
-                _entities[i].Start();
-            }
+            Started = true;
         }//start
 
         public virtual void Update()
@@ -119,6 +124,8 @@ namespace MathForGames
             //for each entity
             for (int i = 0; i < _entities.Length; i++)
             {
+                if (!_entities[i].Started)
+                    _entities[i].Start();
                 _entities[i].Update();
             }
         }//update
@@ -138,8 +145,10 @@ namespace MathForGames
             //for each entity
             for (int i = 0; i < _entities.Length; i++)
             {
-                _entities[i].End();
+                if(_entities[i].Started)
+                    _entities[i].End();
             }
+            Started = false;
         }//End
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Raylib_cs;
+using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -9,11 +11,11 @@ namespace MathForGames
     class Game
     {
         private static bool _gameOver = false;
-        private Scene _scene;
+        private static Scene[] _scenes;
+        private static int _currentSceneIndex = 0;
         private readonly Random rng = new Random();
-        private Entity _entity = new Entity(20,20, '■', ConsoleColor.Green);
-        private Player _player = new Player(5, 5, '■', ConsoleColor.Red);
-
+        private Entity _entity = new Entity(20, 20, Color.GREEN, '■', ConsoleColor.Green);
+        private Player _player = new Player(5, 5, Color.RED, '■', ConsoleColor.Red);
         public static ConsoleColor DefaultColor { get; set; } = ConsoleColor.DarkCyan;
 
         //Static function used to set game over without an instance of game.
@@ -22,33 +24,151 @@ namespace MathForGames
             _gameOver = value;
         }
 
-        //return weather or not the specified consoleKey is pressed
-        public static ConsoleKey GetNextKey()
+        public static void SetCurrentScene(int index)
         {
-            if (!Console.KeyAvailable)
+            if (index < 0 || index >= _scenes.Length)
+                return;
+            if(_scenes[_currentSceneIndex].Started)
+                _scenes[_currentSceneIndex].End();
+
+            _currentSceneIndex = index;
+        }
+
+        public static bool GetKeyDown(int key)
+        {
+            return Raylib.IsKeyDown((KeyboardKey)key);
+        }
+        public static bool GetkeyPressed(int key)
+        {
+            return Raylib.IsKeyPressed((KeyboardKey)key);
+        }
+        public Game()
+        {
+            _scenes = new Scene[0];
+        }
+
+        public static int AddScene(Scene scene)
+        {
+            Scene[] newArray = new Scene[_scenes.Length + 1];
+            //copy values from old array to the old array
+            for (int i = 0; i < _scenes.Length; i++)
             {
-                return 0;
+                newArray[i] = _scenes[i];
             }
 
-            return Console.ReadKey(true).Key;
+            int index = _scenes.Length;
+
+            //sets the new entity at the end of the new array
+            newArray[index] = scene;
+            //set old array to the new array with the new entity
+            _scenes = newArray;
+
+            return index;
         }
+        public static bool RemoveScene(int index)
+        {
+            //checks to see if index is out of bounds of array
+            if (index < 0 || index >= _scenes.Length)
+            {
+                return false;
+            }
+            bool Removed = false;
+
+            //creating a new array that has a slot taken away from an old array
+            Scene[] tempArray = new Scene[_scenes.Length - 1];
+            //create variable to access tempArray index
+            int j = 0;
+            //copy values from the old array to new Array
+            for (int i = 0; i < _scenes.Length; i++)
+            {
+                //If the current index is not the index that needs to be removed
+                //add the value into the old array and increment j
+                if (i != index)
+                {
+                    tempArray[j] = _scenes[i];
+                    j++;
+                }
+                else //gives us our return value for debuging
+                {
+                    Removed = true;
+                    
+                }
+            }
+            //set the old arrat to be the tempArray
+            _scenes = tempArray;
+
+            return Removed;
+        }
+        public static bool RemoveScene(Scene scene)
+        {
+            //checks to see if index is out of bounds of array
+            if (scene == null)
+            {
+                return false;
+            }
+            bool Removed = false;
+
+            //creating a new array that has a slot taken away from an old array
+            Scene[] tempArray = new Scene[_scenes.Length - 1];
+            //create variable to access tempArray index
+            int j = 0;
+            //copy values from the old array to new Array
+            for (int i = 0; i < _scenes.Length; i++)
+            {
+                //If the current index is not the index that needs to be removed
+                //add the value into the old array and increment j
+                if (scene != _scenes[i])
+                {
+                    tempArray[j] = _scenes[i];
+                    j++;
+                }
+                else //gives us our return value for debuging
+                {
+                    Removed = true;
+                }
+            }
+            //set the old arrat to be the tempArray
+            _scenes = tempArray;
+
+            return Removed;
+        }
+
 
         //Called when the game begins. Use this for initialization.
         public void Start()
         {
+            //create a new window for raylib
+            Raylib.InitWindow(1024,760,"blank");
+            //sets the framerate
+            Raylib.SetTargetFPS(60);
+
+            Scene scene1 = new Scene();
+            Scene scene2 = new Scene();
+
+
             Console.CursorVisible = false;
-            _scene = new Scene();
-            _scene.AddEntity(_entity);
-            _scene.AddEntity(_player);
+
+            scene1.AddEntity(_entity);
+            scene1.AddEntity(_player);
+
+            int startingSceneIndex = 0;
+
+            startingSceneIndex = AddScene(scene1);
+            AddScene(scene2);
+
+            SetCurrentScene(startingSceneIndex);
         }
         
         //Called every frame.
         public void Update()
         {
+            if (!_scenes[_currentSceneIndex].Started)
+                _scenes[_currentSceneIndex].Start();
 
-            _scene.Update();
+            _scenes[_currentSceneIndex].Update();
             if (_player.Position.X == _entity.Position.X && _player.Position.Y == _entity.Position.Y)
             {
+                _player.addTail();
                 _entity.Position.X = rng.Next(0, Console.WindowWidth);
                 _entity.Position.Y = rng.Next(0, Console.WindowHeight);
             }
@@ -57,16 +177,20 @@ namespace MathForGames
         //Used to display objects and other info on the screen.
         public void Draw()
         {
+            
+            Raylib.BeginDrawing();
+            Raylib.ClearBackground(Color.DARKGRAY);
             Console.Clear();
-            _scene.Draw();
-            _player.Draw();
+            _scenes[_currentSceneIndex].Draw();
+            Raylib.EndDrawing();
         }
 
 
         //Called when the game ends.
         public void End()
         {
-
+            if (_scenes[_currentSceneIndex].Started)
+                _scenes[_currentSceneIndex].End();
         }
 
 
@@ -75,7 +199,7 @@ namespace MathForGames
         {
             Start();
 
-            while(!_gameOver)
+            while(!_gameOver && !Raylib.WindowShouldClose())
             {
                 Update();
                 Draw();
