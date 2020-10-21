@@ -15,31 +15,32 @@ namespace MathForGames
         }
         public void follow(Entity entity)
         {
-            base.Update();
-            if ((entity.Position.X > Position.X) && (entity.Position != Position))
-            {
-                Velocity.X = 1;
-            }
-            else if ((entity.Position.X < Position.X) && (entity.Position != Position))
-            {
-                Velocity.X = -1;
-            }
-            else
-            {
-                Velocity.X = 0;
-            }
-            if ((entity.Position.Y > Position.Y) && (entity.Position != Position))
-            {
-                Velocity.Y = 1;
-            }
-            else if ((entity.Position.Y < Position.Y) && (entity.Position != Position))
-            {
-                Velocity.Y = -1;
-            }
-            else
-            {
-                Velocity.Y = 0;
-            }
+                base.Update();
+                if ((entity.Position.X > Position.X) && (entity.Position != Position))
+                {
+                    Velocity.X = 1;
+                }
+                else if ((entity.Position.X < Position.X) && (entity.Position != Position))
+                {
+                    Velocity.X = -1;
+                }
+                else
+                {
+                    Velocity.X = 0;
+                }
+                if ((entity.Position.Y > Position.Y) && (entity.Position != Position))
+                {
+                    Velocity.Y = 1;
+                }
+                else if ((entity.Position.Y < Position.Y) && (entity.Position != Position))
+                {
+                    Velocity.Y = -1;
+                }
+                else
+                {
+                    Velocity.Y = 0;
+                }
+            
         }
         public void follow(Vector2 position)
         {

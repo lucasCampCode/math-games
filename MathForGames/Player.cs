@@ -45,35 +45,34 @@ namespace MathForGames
                     _tails[i].follow(_tails[i - 1]);
                 }
             }
-            int xVelocity = -Convert.ToInt32(Game.GetKeyDown((int)KeyboardKey.KEY_A))
-                + Convert.ToInt32(Game.GetKeyDown((int)KeyboardKey.KEY_D));
+            int xVelocity = -Convert.ToInt32(Game.GetKeyPressed((int)KeyboardKey.KEY_A))
+                + Convert.ToInt32(Game.GetKeyPressed((int)KeyboardKey.KEY_D));
 
-            int yVelocity = -Convert.ToInt32(Game.GetKeyDown((int)KeyboardKey.KEY_W))
-                + Convert.ToInt32(Game.GetKeyDown((int)KeyboardKey.KEY_S));
-            Velocity = new Vector2(xVelocity, yVelocity);
+            int yVelocity = -Convert.ToInt32(Game.GetKeyPressed((int)KeyboardKey.KEY_W))
+                + Convert.ToInt32(Game.GetKeyPressed((int)KeyboardKey.KEY_S));
+            switch (xVelocity)
+            {
+                case 1:
+                    Velocity = new Vector2(1, 0);
+                    break;
+                case -1:
+                    Velocity = new Vector2(-1, 0);
+                    break;
+            }
+            switch (yVelocity)
+            {
+                case 1:
+                    Velocity = new Vector2(0, 1);
+                    break;
+                case -1:
+                    Velocity = new Vector2(0, -1);
+                    break;
+            }
+
             //if (Velocity.GetMagnitude() != 0)
             //{
             //    Velocity.X /= Velocity.GetMagnitude();
             //    Velocity.Y /= Velocity.GetMagnitude();
-            //}
-            //switch (Game.GetNextKey())
-            //{
-            //    case ConsoleKey.D:
-            //        _velocity.X = 1;
-            //        _velocity.Y = 0;
-            //        break;
-            //    case ConsoleKey.A:
-            //        _velocity.X = -1;
-            //        _velocity.Y = 0;
-            //        break;
-            //    case ConsoleKey.S:
-            //        _velocity.X = 0;
-            //        _velocity.Y = 1;
-            //        break;
-            //    case ConsoleKey.W:
-            //        _velocity.X = 0;
-            //        _velocity.Y = -1;
-            //        break;
             //}
             base.Update();
             

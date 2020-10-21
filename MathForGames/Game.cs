@@ -38,7 +38,7 @@ namespace MathForGames
         {
             return Raylib.IsKeyDown((KeyboardKey)key);
         }
-        public static bool GetkeyPressed(int key)
+        public static bool GetKeyPressed(int key)
         {
             return Raylib.IsKeyPressed((KeyboardKey)key);
         }
@@ -205,7 +205,7 @@ namespace MathForGames
                 Draw();
                 while (Console.KeyAvailable) 
                     Console.ReadKey(true);
-                Thread.Sleep(250);
+                Thread.Sleep(60);
             }
 
             End();
