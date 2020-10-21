@@ -68,9 +68,9 @@ namespace MathForGames
             Started = true;
         }//start of entity
 
-        public virtual void Update()
+        public virtual void Update(float deltaTime)
         {
-            _position += _velocity;
+            _position += _velocity * (int)deltaTime;
             _position.X = Math.Clamp(_position.X, 0, Console.WindowWidth - 1);
             _position.Y = Math.Clamp(_position.Y, 0, Console.WindowHeight - 1);
         }//updates of entity

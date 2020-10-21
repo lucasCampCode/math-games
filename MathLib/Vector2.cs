@@ -8,7 +8,26 @@ namespace MathLib
         private float _x;
         private float _y;
 
-        
+        public float Magnitude
+        {
+            get
+            {
+                return (float)Math.Sqrt((X * X) + (Y * Y));
+            }
+        }
+        public Vector2 Normalized
+        {
+            get
+            {
+                return Normalize(this);
+            }
+        }
+        public static Vector2 Normalize(Vector2 vector)
+        {
+            if (vector.Magnitude == 0)
+                return new Vector2();
+            return vector / vector.Magnitude;
+        }
         public float X
         {
             get
@@ -36,30 +55,27 @@ namespace MathLib
             _x = 0;
             _y = 0;
         }
-
         public Vector2(float x,float y)
         {
             _x = x;
             _y = y;
         }
-
         public static Vector2 operator +(Vector2 lhs, Vector2 rhs)
         {
-            float x = lhs.X + rhs.X;
-            float y = lhs.Y + rhs.Y;
-            return new Vector2(x, y);
+            return new Vector2(lhs.X + rhs.X, lhs.Y + rhs.Y);
+        }
+        public static Vector2 operator -(Vector2 lhs, Vector2 rhs)
+        {
+            return new Vector2(lhs.X - rhs.X, lhs.Y - rhs.Y);
         }
         public static Vector2 operator *(Vector2 lhs, float rhs)
         {
             return new Vector2(lhs.X * rhs, lhs.Y * rhs);
         }
-        public float GetMagnitude()
+        public static Vector2 operator /(Vector2 lhs, float scalar)
         {
-            return (float)Math.Sqrt((X * X) + (Y * Y));
+            return new Vector2(lhs.X / scalar,lhs.Y / scalar);
         }
-        public Vector2 normalization()
-        {
-            return new Vector2(X % GetMagnitude(), Y % GetMagnitude());
-        }
+        
     }
 }

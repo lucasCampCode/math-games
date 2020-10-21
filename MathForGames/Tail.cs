@@ -13,9 +13,9 @@ namespace MathForGames
         {
 
         }
-        public void follow(Entity entity)
+        public void follow(Entity entity,float deltaTime)
         {
-                base.Update();
+                base.Update(deltaTime);
                 if ((entity.Position.X > Position.X) && (entity.Position != Position))
                 {
                     Velocity.X = 1;
@@ -42,7 +42,7 @@ namespace MathForGames
                 }
             
         }
-        public void follow(Vector2 position)
+        public void follow(Vector2 position,float deltaTime)
         {
             if ((position.X > Position.X) && (position != Position))
             {
@@ -68,7 +68,7 @@ namespace MathForGames
             {
                 Velocity.Y = 0;
             }
-            base.Update();
+            base.Update(deltaTime);
         }
 
 

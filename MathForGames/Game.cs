@@ -160,17 +160,17 @@ namespace MathForGames
         }
         
         //Called every frame.
-        public void Update()
+        public void Update(float deltaTime)
         {
             if (!_scenes[_currentSceneIndex].Started)
                 _scenes[_currentSceneIndex].Start();
 
-            _scenes[_currentSceneIndex].Update();
+            _scenes[_currentSceneIndex].Update(deltaTime);
             if (_player.Position.X == _entity.Position.X && _player.Position.Y == _entity.Position.Y)
             {
                 _player.addTail();
-                _entity.Position.X = rng.Next(0, Console.WindowWidth);
-                _entity.Position.Y = rng.Next(0, Console.WindowHeight);
+                _entity.Position.X = rng.Next(0, Raylib.GetScreenWidth()/16);
+                _entity.Position.Y = rng.Next(0, Raylib.GetScreenHeight()/9);
             }
         }
 
@@ -201,11 +201,11 @@ namespace MathForGames
 
             while(!_gameOver && !Raylib.WindowShouldClose())
             {
-                Update();
+                float deltaTime = Raylib.GetFrameTime();
+                Update(deltaTime);
                 Draw();
                 while (Console.KeyAvailable) 
                     Console.ReadKey(true);
-                Thread.Sleep(60);
             }
 
             End();

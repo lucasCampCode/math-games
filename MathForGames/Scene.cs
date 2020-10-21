@@ -119,14 +119,14 @@ namespace MathForGames
             Started = true;
         }//start
 
-        public virtual void Update()
+        public virtual void Update(float deltaTime)
         {
             //for each entity
             for (int i = 0; i < _entities.Length; i++)
             {
                 if (!_entities[i].Started)
                     _entities[i].Start();
-                _entities[i].Update();
+                _entities[i].Update(deltaTime);
             }
         }//update
 

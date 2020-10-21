@@ -8,12 +8,13 @@ namespace MathForGames
 {
     class Player : Entity
     {
-        private Tail[] _tails;
+        public Tail[] tails { get; private set; }
+        
         public Player(float x,float y,Color rayColor, char icon = '■',ConsoleColor color = ConsoleColor.White)
             : base(x,y,rayColor,icon,color)
         {
             Tail firstTail = new Tail(x, y);
-            _tails = new Tail[] {firstTail};
+            tails = new Tail[] {firstTail};
         }
         public override void Start()
         {
@@ -21,28 +22,28 @@ namespace MathForGames
         }
         public void addTail()
         {
-            Tail[] newEntities = new Tail[_tails.Length + 1];
+            Tail[] newEntities = new Tail[tails.Length + 1];
             //copy values from old array to the old array
-            for (int i = 0; i < _tails.Length; i++)
+            for (int i = 0; i < tails.Length; i++)
             {
-                newEntities[i] = _tails[i];
+                newEntities[i] = tails[i];
             }
             //sets the new entity at the end of the new array
-            newEntities[_tails.Length] = new Tail(_tails[_tails.Length-1].Position.X, _tails[_tails.Length - 1].Position.Y);
+            newEntities[tails.Length] = new Tail(tails[tails.Length-1].Position.X, tails[tails.Length - 1].Position.Y);
             //set old array to the new array with the new entity
-            _tails = newEntities;
+            tails = newEntities;
         }
-        public override void Update()
+        public override void Update(float deltaTime)
         {
-            for (int i = 0; i < _tails.Length; i++)
+            for (int i = 0; i < tails.Length; i++)
             {
                 if (i == 0)
                 {
-                    _tails[i].follow(Position);
+                    tails[i].follow(Position,deltaTime);
                 }
                 else
                 {
-                    _tails[i].follow(_tails[i - 1]);
+                    tails[i].follow(tails[i - 1],deltaTime);
                 }
             }
             int xVelocity = -Convert.ToInt32(Game.GetKeyPressed((int)KeyboardKey.KEY_A))
@@ -69,19 +70,22 @@ namespace MathForGames
                     break;
             }
 
-            //if (Velocity.GetMagnitude() != 0)
-            //{
-            //    Velocity.X /= Velocity.GetMagnitude();
-            //    Velocity.Y /= Velocity.GetMagnitude();
-            //}
-            base.Update();
+            //Velocity = Velocity.Normalized
+            base.Update(deltaTime);
+            for(int i = 1; i < tails.Length; i++)
+            {
+                if(Position.X == tails[i].Position.X && Position.Y == tails[i].Position.Y)
+                {
+                    Game.SetGameOver(true);
+                }
+            }
             
         }
         public override void Draw()
         {
-            for (int i = 0; i< _tails.Length; i++ )
+            for (int i = 0; i< tails.Length; i++ )
             {
-                _tails[i].Draw();
+                tails[i].Draw();
             }
 
             base.Draw();
